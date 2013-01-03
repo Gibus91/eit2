@@ -206,7 +206,9 @@ public class FileBrowser {
 			}
 		}
 	}
-
+/**
+ * construction du dico
+ */
 	public void constructDictionnary() {
 		InputStream ips;
 		int n = 0;
