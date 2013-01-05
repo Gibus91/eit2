@@ -1,7 +1,6 @@
 package org.polytech.eit2.projet;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,8 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
-import java.util.TreeMap;
 
 
 public class FileBrowser {
@@ -38,7 +35,8 @@ public class FileBrowser {
 		try {
 			ips = new FileInputStream(filePath);
 			InputStreamReader ipsr=new InputStreamReader(ips);
-			BufferedReader br=new BufferedReader(ipsr);
+			@SuppressWarnings("resource")
+			BufferedReader br =new BufferedReader(ipsr);
 			String[] words;
 			String line;
 			while ((line=br.readLine())!=null){

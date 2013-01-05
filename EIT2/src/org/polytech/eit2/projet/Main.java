@@ -3,8 +3,8 @@ package org.polytech.eit2.projet;
 
 public class Main {
 
-	private static String trainFilePath = "/Users/matmotherbrain/Dropbox/Projet Eit2/twitter/train.txt";
-	private static String testFilePath = "/Users/matmotherbrain/Dropbox/Projet Eit2/twitter/test.txt";
+	private static String trainFilePath = "./twitter/train.txt";
+	private static String testFilePath = "./twitter/test.txt";
 	
 	/**
 	 * @param args

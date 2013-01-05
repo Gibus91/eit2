@@ -9,8 +9,8 @@ public class MaxEntropie {
 	private HashMap<String, Double> tetaHam;
 	
 	public MaxEntropie(){
-		tetaSpam = new HashMap<String, Double>();
-		tetaHam = new HashMap<String, Double>();
+		setTetaSpam(new HashMap<String, Double>());
+		setTetaHam(new HashMap<String, Double>());
 	}
 
 	public void algoDiscriminant(){
@@ -30,5 +30,21 @@ public class MaxEntropie {
 			}
 			
 		}
+	}
+
+	public HashMap<String, Double> getTetaSpam() {
+		return tetaSpam;
+	}
+
+	public void setTetaSpam(HashMap<String, Double> tetaSpam) {
+		this.tetaSpam = tetaSpam;
+	}
+
+	public HashMap<String, Double> getTetaHam() {
+		return tetaHam;
+	}
+
+	public void setTetaHam(HashMap<String, Double> tetaHam) {
+		this.tetaHam = tetaHam;
 	}
 }
