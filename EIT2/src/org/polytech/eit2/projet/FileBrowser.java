@@ -16,6 +16,8 @@ public class FileBrowser {
 	private Dictionnary dictionnary;
 	private HashMap<String,Integer> top20Frequency;
 	private ArrayList<TweetCategory> categories;
+	private HashMap <Character, ArrayList<String>> tokenWords;
+
 //	private Integer nbIrrelevantTweets;
 //	private Integer nbNeutralTweets;
 //	private Integer nbPostiveTweets;
@@ -27,6 +29,7 @@ public class FileBrowser {
 		dictionnary = new Dictionnary();
 		top20Frequency = new HashMap<String, Integer>();
 		categories = new ArrayList<TweetCategory>();
+		tokenWords = new HashMap <Character, ArrayList<String>>();
 //		nbIrrelevantTweets = nbNeutralTweets = nbPostiveTweets = nbNegativeTweets = 0;
 	}
 	
@@ -38,6 +41,7 @@ public class FileBrowser {
 			BufferedReader br=new BufferedReader(ipsr);
 			String[] words;
 			String line;
+			int n = 0;
 			while ((line=br.readLine())!=null){
 				this.dictionnary.setNbTweets(this.dictionnary.getNbTweets() + 1);
 				words = line.substring(line.indexOf(')') + 1).split("[\\s\\!\"#&'()*+,-\\./:;<=>\\?\\[\\]^_`{|}~§@]+");
@@ -55,9 +59,23 @@ public class FileBrowser {
 				}
 				currentCategory.setNbTweets(categoryType.toLowerCase());
 				for (String word : words){
-					String w = word.toLowerCase();
-					this.dictionnary.addWord(w);
-					currentCategory.addWord(w, categoryType.toLowerCase());
+					if(word.compareTo("") != 0){
+						String w = word.toLowerCase();
+						boolean isTokenWord = false;
+						char firstLetter = w.charAt(0);
+						if(this.tokenWords.containsKey(firstLetter)){
+							for(String tWord : this.tokenWords.get(firstLetter)){
+								if (tWord.compareTo(w) == 0){	
+									isTokenWord = true;
+									break;
+								}
+							}
+						}
+						if(!isTokenWord){
+							this.dictionnary.addWord(w);
+							currentCategory.addWord(w, categoryType.toLowerCase());
+						}
+					}
 				}
 			}
 			this.top20Frequency = dictionnary.getTop20Frequency();
@@ -165,4 +183,40 @@ public class FileBrowser {
 		return accuratePercentage;
 	}
 	
+	public void addTokenWords(String filePath){
+		InputStream ips;
+		try {
+			ips = new FileInputStream(filePath);
+			InputStreamReader ipsr=new InputStreamReader(ips);
+			BufferedReader br=new BufferedReader(ipsr);
+			String line;
+			while ((line=br.readLine())!=null){
+				char firstLetter = line.toLowerCase().charAt(0);
+				if(!this.tokenWords.containsKey(firstLetter)){
+					ArrayList<String> newLetter = new ArrayList<String>();
+					newLetter.add(line.toLowerCase());
+					this.tokenWords.put(firstLetter, newLetter);
+				}
+				else{
+					ArrayList<String> knownLetter = this.tokenWords.get(firstLetter);
+					boolean found = false;
+					for(String word : knownLetter){
+						if(word.compareTo(line) == 0){
+							found = true;
+							break;
+						}
+					}
+					if (!found){
+						knownLetter.add(line.toLowerCase());
+					}
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
