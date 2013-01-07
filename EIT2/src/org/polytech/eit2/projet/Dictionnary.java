@@ -14,7 +14,7 @@ public class Dictionnary {
 	public Dictionnary(){
 		dictionary = new TreeMap<String, Integer>();
 		totalWords = differentWords = nbTweets = 0;
-		System.out.println("COUCOU JBUS");
+		System.out.println("COUCOU JBUS blabla");
 	}
 	
 	public void addWord(String w){
