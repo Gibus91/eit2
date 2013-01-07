@@ -14,7 +14,6 @@ public class Dictionnary {
 	public Dictionnary(){
 		dictionary = new TreeMap<String, Integer>();
 		totalWords = differentWords = nbTweets = 0;
-		System.out.println("JB");
 	}
 	
 	public void addWord(String w){
@@ -41,6 +40,13 @@ public class Dictionnary {
 			n++;
 		}
 		return top20Frequency;
+	}
+	//Le bug viendrai du fait qu'avant c'Žtait 0.00001 si le dico ne contient pas le mot
+	public double wordFrequency(String word){
+		if (!this.dictionary.containsKey(word))
+			return 0.000000001;
+		else
+			return this.dictionary.get(word)/(double)this.getTotalWords();
 	}
 
 	public TreeMap<String, Integer> getDictionary() {

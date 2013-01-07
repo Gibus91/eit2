@@ -13,6 +13,6 @@ public class Main {
 		// TODO Auto-generated method stub
 		FileBrowser fb = new FileBrowser(trainFilePath);
 		fb.setDictionaries();
+		fb.testMultinomial();
 	}
-
 }
