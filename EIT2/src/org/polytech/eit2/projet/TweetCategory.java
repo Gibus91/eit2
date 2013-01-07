@@ -1,5 +1,8 @@
 package org.polytech.eit2.projet;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class TweetCategory {
 	private String category;
 	private Dictionnary categoryDictionary;
@@ -109,4 +112,5 @@ public class TweetCategory {
 		}
 		return highestProbability;
 	}
+	
 }
