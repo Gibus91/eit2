@@ -102,7 +102,7 @@ public class FileBrowser {
 				if (currentCategory == null){
 					currentCategory = new TweetCategory(categoryName.toLowerCase());
 				}
-				guess = currentCategory.multiNommiale(words);
+				guess = currentCategory.biNommiale(words);
 				int guessIndex = -1;
 				int actualIndex = -1;
 				if (guess.contentEquals("positive"))
