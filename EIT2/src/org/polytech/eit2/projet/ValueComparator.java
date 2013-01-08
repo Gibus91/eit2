@@ -3,8 +3,12 @@ package org.polytech.eit2.projet;
 import java.util.Comparator;
 import java.util.Map;
 
-
-public class ValueComparator implements Comparator<String> {
+/**
+ * Cette classe permet de créer une treeMap triée par ordre décroissant des valeurs
+ * @author Mathieu Jouve et Jean-Baptiste Borel
+ *
+ */
+class ValueComparator implements Comparator<String> {
 
     Map<String, Integer> base;
     public ValueComparator(Map<String, Integer> base) {

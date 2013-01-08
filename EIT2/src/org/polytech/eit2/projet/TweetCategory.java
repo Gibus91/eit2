@@ -1,5 +1,11 @@
 package org.polytech.eit2.projet;
 
+/**
+ * Cette classe représente une société 
+ * et contient 5 dictionnaires (un général et un pour chaque polarité)
+ * @author Mathieu Jouve et Jean-Baptiste Borel
+ *
+ */
 public class TweetCategory {
 	private String category;
 	private Dictionnary categoryDictionary;
@@ -21,6 +27,13 @@ public class TweetCategory {
 		negative = new Dictionnary();
 	}
 
+	/**
+	 * Cette methode appelee depuis file browser lors de la construction des dictionnaires,
+	 * permet d'ajouter ou mettre un jour un mot dans la polarité correspondante au tweet en cours
+	 * et dans le dictionnaire general de la société
+	 * @param w = le mot a ajouter au dictionnaires
+	 * @param type = la polarite concernee
+	 */
 	public void addWord(String w, String type) {
 		this.categoryDictionary.addWord(w);
 		if (type.contentEquals("irrelevant"))
@@ -34,6 +47,12 @@ public class TweetCategory {
 
 	}
 
+	/**
+	 * Cette methode appelee depuis file browser lors de la construction des dictionnaires,
+	 * permet d'incrementer le nombre de tweets dans la polarité correspondante au tweet en cours
+	 * et dans le dictionnaire general de la société
+	 * @param type = la polarite concernee
+	 */
 	public void setNbTweets(String type) {
 		this.categoryDictionary.setNbTweets(this.categoryDictionary
 				.getNbTweets() + 1);
@@ -50,8 +69,17 @@ public class TweetCategory {
 	public String getCategory() {
 		return category;
 	}
-
-	public String binomialBernouilli(String words[]) {
+	
+	/**
+	 * Cette methode permet d'effectuer un algorithme binomial sur un tweet :
+	 * Pour chaque mot du dictionnaire général, on vérifie si celui-ci se trouve
+	 * dans le tweet, on  ajoute à la probabilite correspondant à une polarite,
+	 * log10(beta) et log10(1 - beta) dans le cas contraire. Le beta est calcule pour 
+	 * chaque mot et pour chaque polarité dans le dictionnary correspondant (experience de Bernouilli)
+	 * @param words : le tweet etudie
+	 * @return la probabilite la plus haute ("irrelevant", "neutral", "positive" ou "negative")
+	 */
+	public String biNommialeBernouilli(String words[]) {
 		String highestProbability = "";
 		double positiveProbability = 0.0;
 		double negativeProbability = 0.0;
@@ -66,7 +94,7 @@ public class TweetCategory {
 						break;
 					}
 				}
-
+				
 				if (found) {
 					positiveProbability += Math.log10(this.positive
 							.bernouilli(word));
@@ -88,7 +116,6 @@ public class TweetCategory {
 				}
 			}
 		}
-
 		double probaMax = Math.max(
 				Math.max(positiveProbability, negativeProbability),
 				Math.max(irrelevantProbability, neutralProbability));
@@ -96,7 +123,7 @@ public class TweetCategory {
 			highestProbability = "irrelevant";
 		else if (probaMax == neutralProbability
 				|| Math.abs(positiveProbability - negativeProbability)
-						/ Math.max(positiveProbability, negativeProbability) <= 0.05)
+						/ Math.max(positiveProbability, negativeProbability) <= 0.05) // On renvoie "neutral" si il y a un rapport de moins de 5% entre positive et negative
 			highestProbability = "neutral";
 		else if (probaMax == positiveProbability)
 			highestProbability = "positive";
@@ -105,7 +132,15 @@ public class TweetCategory {
 		return highestProbability;
 	}
 
-	public String multinomial(String words[]) {
+	/**
+	 * Cette méthode permet d'effectuer un algorithme multinommial sur un tweet :
+	 * Pour chaque mot du tweet, on calcul sa frequence dans chacun des dictionnaires
+	 * des polarites. Ainsi la probabilite d'un tweet sur une polarite est egale au produit
+	 * des probabilite de chaque mot sur cette polarite.
+	 * @param words
+	 * @return La probabilite la plus haute ("irrelevant", "neutral", "positive" ou "negative")
+	 */
+	public String multiNommiale(String words[]) {
 		String highestProbability = "";
 		double positiveProbability = 1.0;
 		double negativeProbability = 1.0;
@@ -118,7 +153,6 @@ public class TweetCategory {
 					.toLowerCase());
 			neutralProbability *= neutral.wordFrequency(word.toLowerCase());
 		}
-
 		double probaMax = Math.max(
 				Math.max(positiveProbability, negativeProbability),
 				Math.max(irrelevantProbability, neutralProbability));
@@ -126,7 +160,7 @@ public class TweetCategory {
 			highestProbability = "irrelevant";
 		else if (probaMax == neutralProbability
 				|| Math.abs(positiveProbability - negativeProbability)
-						/ Math.max(positiveProbability, negativeProbability) <= 0.05)
+						/ Math.max(positiveProbability, negativeProbability) <= 0.05) // On renvoie "neutral" si il y a un rapport de moins de 5% entre positive et negative
 			highestProbability = "neutral";
 		else if (probaMax == positiveProbability)
 			highestProbability = "positive";
@@ -166,5 +200,5 @@ public class TweetCategory {
 	public void setNegative(Dictionnary negative) {
 		this.negative = negative;
 	}
-
+	
 }

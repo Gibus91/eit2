@@ -13,6 +13,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+/**
+ * Cette classe nous permet de parcourir les fichiers et de construire les differents dictionnaires
+ * ou de lancer les test
+ * @author Mathieu Jouve et Jean-Baptiste Borel
+ *
+ */
 public class FileBrowser {
 	private String filePath;
 	private Dictionnary dictionnary;
@@ -44,6 +50,11 @@ public class FileBrowser {
 		tokenWords = new HashMap<Character, ArrayList<String>>();
 	}
 
+	/**
+	 * Cette methode parcours l'ensemble du corpus d'entrainement et pour chaque tweet
+	 * range l'ensemble de ses mots dans le dictionnaire general, et les dictionnaires correspondants
+	 * a sa societe/catergorie et a sa polarite
+	 */
 	public void setDictionaries() {
 		InputStream ips;
 		try {
@@ -56,29 +67,34 @@ public class FileBrowser {
 			while ((line = br.readLine()) != null) {
 				this.dictionnary
 						.setNbTweets(this.dictionnary.getNbTweets() + 1);
+				// Cette ligne nous permet d'enlever la majorite de la ponctuation des tweet
 				words = line.substring(line.indexOf(')') + 1).split(
 						"[\\s\\!\"#&'()*+,-\\./:;<=>\\?\\[\\]^_`{|}~¬ß@]+");
 				String categoryName = line.substring(line.indexOf(',') + 1,
 						line.indexOf(')'));
 				String categoryType = line.substring(1, line.indexOf(','));
 				TweetCategory currentCategory = null;
+				// On recupere le dictionnaire correspondant au tweet
 				for (TweetCategory tc : categories) {
 					if (tc.getCategory().contentEquals(
 							categoryName.toLowerCase())) {
 						currentCategory = tc;
 					}
 				}
+				// On le cree si il n'existe pas
 				if (currentCategory == null) {
 					currentCategory = new TweetCategory(
 							categoryName.toLowerCase());
 					categories.add(currentCategory);
 				}
+				// On implemente le nombre de tweet du dictionnaire generale de cette categorie/societe
 				currentCategory.setNbTweets(categoryType.toLowerCase());
 				for (String word : words) {
-					if (word.compareTo("") != 0) {
+					if (word.compareTo("") != 0) { // On n'enregistre pas le mot vide
 						String w = word.toLowerCase();
 						boolean isTokenWord = false;
 						char firstLetter = w.charAt(0);
+						// Si on avait mis en place un tokenizer. On regarde si le mot courant est un mot outil
 						if (this.tokenWords.containsKey(firstLetter)) {
 							for (String tWord : this.tokenWords
 									.get(firstLetter)) {
@@ -88,6 +104,7 @@ public class FileBrowser {
 								}
 							}
 						}
+						//Si non, on peut le rajouter aux dictionnaires concernes
 						if (!isTokenWord) {
 							this.dictionnary.addWord(w);
 							currentCategory.addWord(w,
@@ -98,6 +115,8 @@ public class FileBrowser {
 			}
 			br.close();
 			this.top20Frequency = dictionnary.getTop20Frequency();
+			// On affiche les 20 mots les plus frequents, le nombre total de mots, le nombre de mots distincts
+			// et le nombre total de tweets
 			System.out.println("20 most frequent words : \n"
 					+ this.top20Frequency.toString());
 			System.out.println("Total words = "
@@ -117,6 +136,11 @@ public class FileBrowser {
 
 	}
 
+	/**
+	 * Cette methode permet d'appeller la methode mutlinommiale sur un corpus de tweet.
+	 * Elle affiche la matrice de confusion et le nombre d'erreurs de couts 1, 2, 3 et 4
+	 * @param destFile : le fichier dans lequel on ecrira la polarite supposee pour chaque tweet
+	 */
 	public void testMultinomial(String destFile) {
 		int nbFalse = 0;
 		int posWhenNeg = 0;
@@ -146,19 +170,25 @@ public class FileBrowser {
 						line.indexOf(')'));
 				String categoryType = line.substring(1, line.indexOf(','));
 				TweetCategory currentCategory = null;
+				// On recupere la categorie concernee
 				for (TweetCategory tc : categories) {
 					if (tc.getCategory().contentEquals(
 							categoryName.toLowerCase())) {
 						currentCategory = tc;
 					}
 				}
+				// Si Jamais, la categorie n'est pas encore enregistree, il nous faut quand même
+				// en creer un temporaire afin d'eviter les erreurs
 				if (currentCategory == null) {
 					currentCategory = new TweetCategory(
 							categoryName.toLowerCase());
 				}
-
-				guess = currentCategory.multinomial(words);
+				
+				// On appelle la methode multiNommiale de la categorie/societe correspondante
+				guess = currentCategory.multiNommiale(words);
+				// On ecrit la polarite supposee du tweet dans le fichier de resultat
 				out.println(guess);
+				// On compte le nombre d'erreurs afin de pouvoir les afficher correctement
 				int guessIndex = -1;
 				int actualIndex = -1;
 				if (guess.contentEquals("positive"))
@@ -215,6 +245,11 @@ public class FileBrowser {
 		}
 	}
 
+	/**
+	 * Cette methode est exactement la meme que testMultinomial
+	 * excepte qu'elle appelle la methode binommiale
+	 * @param destFile : le fichier dans lequel on ecrira la polarite supposee pour chaque tweet 
+	 */
 	public void testBiNommialeBernouilli(String destFile) {
 		int nbFalse = 0;
 		int posWhenNeg = 0;
@@ -256,7 +291,9 @@ public class FileBrowser {
 							categoryName.toLowerCase());
 				}
 
-				guess = currentCategory.binomialBernouilli(words);
+				//On appelle la fonction binommiale de la categorie/societe correspondante
+				guess = currentCategory.biNommialeBernouilli(words);
+				// On ecrit la polarite supposee du tweet dans le fichier de resultat
 				out.println(guess);
 
 				int guessIndex = -1;
@@ -315,6 +352,11 @@ public class FileBrowser {
 		}
 	}
 
+	/**
+	 * Cette methode, appelee depuis le main, AVANT la construction des dictionnaires
+	 * remplit la liste des mots outils recuperes dans le fichier desire
+	 * @param filePath : le fichier contenant les mots outils
+	 */
 	public void addTokenWords(String filePath) {
 		InputStream ips;
 		try {
@@ -353,10 +395,16 @@ public class FileBrowser {
 		}
 	}
 	
+	/**
+	 * Pour une polarite donnee, retourne les 20 mots les plus frequents et les 20 mots
+	 * les moins frequents
+	 * @param polarite
+	 */
 	public void top20Significance(String polarite){
 		HashMap<String, Integer> top20 = new HashMap<String, Integer>();
 		HashMap<String, Integer> less20 = new HashMap<String, Integer>();
 		
+		//On recupere tous les dictionnaires de la polarite desire (dans toutes les categories)
 		for(TweetCategory c : this.categories){
 			Dictionnary tmp;
 			if(polarite.contentEquals("irrelevant"))
@@ -369,9 +417,13 @@ public class FileBrowser {
 				tmp = c.getNegative();
 			else
 				tmp = new Dictionnary();
+			// Pour chaque dictionnaire on recupere les 20 mots les plus frequents
 			HashMap <String, Integer> topReturn = tmp.getTop20Frequency();
+			// Pour chaque dictionnaire on recupere les 20 mots les moins frequents
 			HashMap <String, Integer> lessReturn = tmp.getLess20Frequency();
 			
+			// On garde pour chaque mot du top 20 de chaque categorie
+			//la frequence la plus elevee (on aurait peut etre du les additionner)
 			for(String word : topReturn.keySet()){
 				if(!top20.containsKey(word))
 					top20.put(word, topReturn.get(word));
@@ -380,6 +432,8 @@ public class FileBrowser {
 					top20.put(word, topReturn.get(word));					
 				}
 			}
+			// On garde pour chaque mot du top 20 (moins frequent) de chaque categorie
+			//la frequence la plus elevee (on aurait peut etre du les additionner)
 			for(String word : lessReturn.keySet()){
 				if(!less20.containsKey(word)){
 					less20.put(word, lessReturn.get(word));
@@ -391,6 +445,7 @@ public class FileBrowser {
 			}
 		}
 
+		// On garde les 20 mots les plus/moins frequents des 4 categories pour la polarite
 		ValueComparator vcTop = new ValueComparator(top20);
 		ValueComparator vcLeast = new ValueComparator(less20);
 		TreeMap<String, Integer> tmpTop = new TreeMap<String, Integer>(vcTop);
@@ -415,6 +470,7 @@ public class FileBrowser {
 			bufferTmp2.put(w, less20.get(w));
 			n++;
 		}
+		// On enregistre les tops
 		if(polarite.contentEquals("irrelevant")){
 			this.top20MostIrrelevant = bufferTmp;
 			this.top20LeastIrrelevant = bufferTmp2;
@@ -431,12 +487,18 @@ public class FileBrowser {
 		
 	}
 	
+	/**
+	 *  Cette methode permet de calculer et d'afficher les top20 (plus/moins frequents) pour chaque polarite
+	 */
 	public void setAllTops(){
 		top20Significance("irrelevant");
 		top20Significance("neutral");
 		top20Significance("positive");
 		top20Significance("negative");
 		ArrayList<String> toDelete = new ArrayList<String>();
+		// Pour chaque top 20, on enleve ceux en commum avec les autres polarites
+		// On compare le premier aux trois autres, puis le deuxième aux 2 derniers
+		// et le troisième au dernier
 		for(String wordIrre : this.top20MostIrrelevant.keySet()){
 			boolean foundWord = false;
 			if(this.top20MostNeutral.containsKey(wordIrre)){
@@ -493,8 +555,11 @@ public class FileBrowser {
 			this.top20MostPositive.remove(word);
 		}
 		toDelete = new ArrayList<String>();
-		
 
+
+		// Pour chaque top 20 (moins frequent), on enleve ceux en commum avec les autres polarites
+		// On compare le premier aux trois autres, puis le deuxième aux 2 derniers
+		// et le troisième au dernier
 		for(String wordIrre : this.top20LeastIrrelevant.keySet()){
 			boolean foundWord = false;
 			if(this.top20LeastNeutral.containsKey(wordIrre)){
@@ -556,6 +621,15 @@ public class FileBrowser {
 		System.out.println("\nTop most negative : \n"+ this.top20MostNegative.toString()+"\nTop least negative : \n "+ this.top20LeastNegative.toString()+"\n");
 	}
 
+	/**
+	 * Cette methode affiche le nombre d'erreurs et leur cout ainsi que la matrice de confusion
+	 * @param nbFalse
+	 * @param posWhenNeg
+	 * @param neuWhenIrr
+	 * @param posNegWhenIrrNeu
+	 * @param irrNeuWhenPosNeg
+	 * @param matrice
+	 */
 	public void afficherResultats(int nbFalse, int posWhenNeg, int neuWhenIrr,
 			int posNegWhenIrrNeu, int irrNeuWhenPosNeg, int matrice[][]) {
 		double accuratePercentage = 0.0;
