@@ -51,7 +51,7 @@ negative
 neutral
 irrelevant
 positive
-positive
+neutral
 irrelevant
 neutral
 neutral
@@ -348,7 +348,7 @@ negative
 irrelevant
 irrelevant
 irrelevant
-negative
+neutral
 irrelevant
 irrelevant
 neutral
@@ -2266,7 +2266,7 @@ positive
 neutral
 irrelevant
 negative
-negative
+neutral
 neutral
 neutral
 neutral

@@ -98,7 +98,7 @@ public class TweetCategory {
 			highestProbability = "irrelevant";
 		else if (probaMax == neutralProbability
 				|| Math.abs(positiveProbability - negativeProbability)
-						/ Math.max(positiveProbability, negativeProbability) <= 0.03)
+						/ Math.max(positiveProbability, negativeProbability) <= 0.08)
 			highestProbability = "neutral";
 		else if (probaMax == positiveProbability)
 			highestProbability = "positive";
@@ -130,7 +130,7 @@ public class TweetCategory {
 			highestProbability = "irrelevant";
 		else if (probaMax == neutralProbability
 				|| Math.abs(positiveProbability - negativeProbability)
-						/ Math.max(positiveProbability, negativeProbability) <= 0.03)
+						/ Math.max(positiveProbability, negativeProbability) <= 0.08)
 			highestProbability = "neutral";
 		else if (probaMax == positiveProbability)
 			highestProbability = "positive";
