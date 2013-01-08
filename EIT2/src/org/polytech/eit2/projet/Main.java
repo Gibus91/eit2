@@ -20,22 +20,22 @@ public class Main {
 		fbTokenizer2.addTokenWords(longTokenFilePath);
 		System.out.println("\n**********Resultats sans Tokenizer**********\n");
 		fb.setDictionaries();
-<<<<<<< HEAD
-		fb.testMultinomial();
-		fb.testBiNommialeBernouilli();
+
+		fb.testMultinomial("./results/trainMultibinomialSansToken.txt");
+		fb.testBiNommialeBernouilli("./results/trainBinommial.txt");
 		System.out.println("\n**********Resultats avec Tokenizer Short**********\n");
 		fbTokenizer.setDictionaries();
-		fbTokenizer.testMultinomial();
-		fbTokenizer.testBiNommialeBernouilli();
+		fbTokenizer.testMultinomial("./results/trainMultibinomialShortToken.txt");
+		fbTokenizer.testBiNommialeBernouilli("./results/trainBinommial.txt");
 		System.out.println("\n**********Resultats avec Tokenizer Long**********\n");
 		fbTokenizer2.setDictionaries();
-		fbTokenizer2.testMultinomial();
-		fbTokenizer2.testBiNommialeBernouilli();
-=======
+		fbTokenizer2.testMultinomial("./results/trainMultibinomialLongToken.txt");
+		fbTokenizer2.testBiNommialeBernouilli("./results/trainBinommial.txt");
+
 		fb.testMultinomial("./results/trainBinommial.txt");
 //		System.out.println("\n**********Resultats avec Tokenizer**********\n");
 //		fbTokenizer.setDictionaries();
 //		fbTokenizer.testMultinomial();
->>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
+
 	}
 }

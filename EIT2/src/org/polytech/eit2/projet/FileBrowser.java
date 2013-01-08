@@ -123,7 +123,7 @@ public class FileBrowser {
 			ips = new FileInputStream(filePath);
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
-			
+
 			File outFile = new File(destFile);
 			outFile.delete();
 			FileOutputStream fos = new FileOutputStream(outFile);
@@ -171,7 +171,7 @@ public class FileBrowser {
 					actualIndex = 3;
 				matrice[guessIndex][actualIndex]++;
 				if (!guess.contentEquals(categoryType)) {
-//					System.out.println("Error at line : "+n);
+					// System.out.println("Error at line : "+n);
 					nbFalse++;
 					if (guess.contentEquals("positive")
 							|| guess.contentEquals("negative")) {
@@ -192,15 +192,16 @@ public class FileBrowser {
 				n++;
 
 			}
-<<<<<<< HEAD
+
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
 					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
-=======
-			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr, posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+
+			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
+					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
 			ips.close();
 			out.flush();
 			out.close();
->>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -209,23 +210,7 @@ public class FileBrowser {
 			e.printStackTrace();
 		}
 	}
-<<<<<<< HEAD
 
-	public void testBiNommialeBernouilli() {
-		int nbFalse = 0;
-		int posWhenNeg = 0;
-		int neuWhenIrr = 0;
-		int posNegWhenIrrNeu = 0;
-		int irrNeuWhenPosNeg = 0;
-		int[][] matrice = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
-				{ 0, 0, 0, 0 } };
-		InputStream ips;
-		try {
-			ips = new FileInputStream(filePath);
-			InputStreamReader ipsr = new InputStreamReader(ips);
-			BufferedReader br = new BufferedReader(ipsr);
-=======
-	
 	public void testBiNommialeBernouilli(String destFile) {
 		int nbFalse = 0;
 		int posWhenNeg = 0;
@@ -239,13 +224,12 @@ public class FileBrowser {
 			ips = new FileInputStream(filePath);
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
-			
+
 			File outFile = new File(destFile);
 			outFile.delete();
 			FileOutputStream fos = new FileOutputStream(outFile);
 			PrintWriter out = new PrintWriter(fos);
-			
->>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
+
 			String[] words;
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -268,12 +252,12 @@ public class FileBrowser {
 				}
 
 				guess = currentCategory.biNommialeBernouilli(words);
-<<<<<<< HEAD
+
 				// System.out.println("Guess : "+guess+"\nCategory : "+categoryName);
-=======
+
 				out.println(guess);
-//				System.out.println("Guess : "+guess+"\nCategory : "+categoryName);
->>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
+				// System.out.println("Guess : "+guess+"\nCategory : "+categoryName);
+
 				int guessIndex = -1;
 				int actualIndex = -1;
 				if (guess.contentEquals("positive"))
@@ -313,15 +297,15 @@ public class FileBrowser {
 				}
 
 			}
-<<<<<<< HEAD
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
 					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
-=======
-			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr, posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+
+			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
+					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
 			ips.close();
 			out.flush();
 			out.close();
->>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -436,5 +420,5 @@ public class FileBrowser {
 	public void setTokenWords(HashMap<Character, ArrayList<String>> tokenWords) {
 		this.tokenWords = tokenWords;
 	}
-	
+
 }
