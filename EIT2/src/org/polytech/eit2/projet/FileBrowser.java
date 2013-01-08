@@ -157,7 +157,7 @@ public class FileBrowser {
 							categoryName.toLowerCase());
 				}
 
-				guess = currentCategory.multiNommiale(words);
+				guess = currentCategory.multinomial(words);
 				out.println(guess);
 				int guessIndex = -1;
 				int actualIndex = -1;
@@ -256,7 +256,7 @@ public class FileBrowser {
 							categoryName.toLowerCase());
 				}
 
-				guess = currentCategory.biNommialeBernouilli(words);
+				guess = currentCategory.binomialBernouilli(words);
 				out.println(guess);
 
 				int guessIndex = -1;

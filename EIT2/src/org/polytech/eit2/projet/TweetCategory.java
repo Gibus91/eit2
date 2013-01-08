@@ -51,7 +51,7 @@ public class TweetCategory {
 		return category;
 	}
 
-	public String biNommialeBernouilli(String words[]) {
+	public String binomialBernouilli(String words[]) {
 		String highestProbability = "";
 		double positiveProbability = 0.0;
 		double negativeProbability = 0.0;
@@ -66,7 +66,7 @@ public class TweetCategory {
 						break;
 					}
 				}
-				
+
 				if (found) {
 					positiveProbability += Math.log10(this.positive
 							.bernouilli(word));
@@ -88,9 +88,7 @@ public class TweetCategory {
 				}
 			}
 		}
-		/**
-		 * TODO
-		 */
+
 		double probaMax = Math.max(
 				Math.max(positiveProbability, negativeProbability),
 				Math.max(irrelevantProbability, neutralProbability));
@@ -98,7 +96,7 @@ public class TweetCategory {
 			highestProbability = "irrelevant";
 		else if (probaMax == neutralProbability
 				|| Math.abs(positiveProbability - negativeProbability)
-						/ Math.max(positiveProbability, negativeProbability) <= 0.03)
+						/ Math.max(positiveProbability, negativeProbability) <= 0.05)
 			highestProbability = "neutral";
 		else if (probaMax == positiveProbability)
 			highestProbability = "positive";
@@ -107,7 +105,7 @@ public class TweetCategory {
 		return highestProbability;
 	}
 
-	public String multiNommiale(String words[]) {
+	public String multinomial(String words[]) {
 		String highestProbability = "";
 		double positiveProbability = 1.0;
 		double negativeProbability = 1.0;
@@ -120,9 +118,7 @@ public class TweetCategory {
 					.toLowerCase());
 			neutralProbability *= neutral.wordFrequency(word.toLowerCase());
 		}
-		/**
-		 * TODO
-		 */
+
 		double probaMax = Math.max(
 				Math.max(positiveProbability, negativeProbability),
 				Math.max(irrelevantProbability, neutralProbability));
@@ -130,7 +126,7 @@ public class TweetCategory {
 			highestProbability = "irrelevant";
 		else if (probaMax == neutralProbability
 				|| Math.abs(positiveProbability - negativeProbability)
-						/ Math.max(positiveProbability, negativeProbability) <= 0.03)
+						/ Math.max(positiveProbability, negativeProbability) <= 0.05)
 			highestProbability = "neutral";
 		else if (probaMax == positiveProbability)
 			highestProbability = "positive";
@@ -170,5 +166,5 @@ public class TweetCategory {
 	public void setNegative(Dictionnary negative) {
 		this.negative = negative;
 	}
-	
+
 }
