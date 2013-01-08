@@ -19,7 +19,7 @@ public class Main {
 //		fbTokenizer.addTokenWords(longTokenFilePath);
 		System.out.println("\n**********Resultats sans Tokenizer**********\n");
 		fb.setDictionaries();
-		fb.testBiNommialeBernouilli();
+		fb.testMultinomial("./results/trainBinommial.txt");
 //		System.out.println("\n**********Resultats avec Tokenizer**********\n");
 //		fbTokenizer.setDictionaries();
 //		fbTokenizer.testMultinomial();
