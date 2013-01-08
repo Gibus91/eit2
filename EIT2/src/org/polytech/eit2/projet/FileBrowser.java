@@ -125,7 +125,8 @@ public class FileBrowser {
 			BufferedReader br = new BufferedReader(ipsr);
 
 			File outFile = new File(destFile);
-			outFile.delete();
+			if(outFile.exists())
+				outFile.delete();
 			FileOutputStream fos = new FileOutputStream(outFile);
 			PrintWriter out = new PrintWriter(fos);
 			String[] words;
@@ -226,7 +227,8 @@ public class FileBrowser {
 			BufferedReader br = new BufferedReader(ipsr);
 
 			File outFile = new File(destFile);
-			outFile.delete();
+			if(outFile.exists())
+				outFile.delete();
 			FileOutputStream fos = new FileOutputStream(outFile);
 			PrintWriter out = new PrintWriter(fos);
 

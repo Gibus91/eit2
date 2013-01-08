@@ -31,11 +31,6 @@ public class Main {
 		fbTokenizer2.setDictionaries();
 		fbTokenizer2.testMultinomial("./results/trainMultibinomialLongToken.txt");
 		fbTokenizer2.testBiNommialeBernouilli("./results/trainBinommial.txt");
-
 		fb.testMultinomial("./results/trainBinommial.txt");
-//		System.out.println("\n**********Resultats avec Tokenizer**********\n");
-//		fbTokenizer.setDictionaries();
-//		fbTokenizer.testMultinomial();
-
 	}
 }
