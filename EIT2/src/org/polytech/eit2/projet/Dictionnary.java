@@ -48,6 +48,18 @@ public class Dictionnary {
 		else
 			return this.dictionary.get(word)/(double)this.getTotalWords();
 	}
+	
+	public double bernouilli (String word){
+		double beta;
+		if(this.dictionary.containsKey(word))
+			beta = (double)this.dictionary.get(word)/this.nbTweets;
+		else
+			beta = 0.000000001/this.nbTweets;
+//		if(word.contentEquals("microsoft")){
+//			System.out.println("Beta for microsoft = "+beta);
+//		}
+		return beta;
+	}
 
 	public TreeMap<String, Integer> getDictionary() {
 		return dictionary;

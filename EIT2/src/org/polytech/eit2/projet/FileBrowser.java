@@ -105,8 +105,91 @@ public class FileBrowser {
 
 	}
 
-	public double testMultinomial() {
-		double accuratePercentage = 0.0;
+	public void testMultinomial() {
+		int nbFalse = 0;
+		int posWhenNeg = 0;
+		int neuWhenIrr = 0;
+		int posNegWhenIrrNeu = 0;
+		int irrNeuWhenPosNeg = 0;
+		int[][] matrice = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
+				{ 0, 0, 0, 0 } };
+		InputStream ips;
+		try {
+			ips = new FileInputStream(filePath);
+			InputStreamReader ipsr = new InputStreamReader(ips);
+			BufferedReader br = new BufferedReader(ipsr);
+			String[] words;
+			String line;
+			while ((line = br.readLine()) != null) {
+				String guess;
+				words = line.substring(line.indexOf(')') + 1).split(
+						"[\\s\\!\"#&'()*+,-\\./:;<=>\\?\\[\\]^_`{|}~§@]+");
+				String categoryName = line.substring(line.indexOf(',') + 1,
+						line.indexOf(')'));
+				String categoryType = line.substring(1, line.indexOf(','));
+				TweetCategory currentCategory = null;
+				for (TweetCategory tc : categories) {
+					if (tc.getCategory().contentEquals(
+							categoryName.toLowerCase())) {
+						currentCategory = tc;
+					}
+				}
+				if (currentCategory == null) {
+					currentCategory = new TweetCategory(
+							categoryName.toLowerCase());
+				}
+
+				guess = currentCategory.multiNommiale(words);
+				int guessIndex = -1;
+				int actualIndex = -1;
+				if (guess.contentEquals("positive"))
+					guessIndex = 0;
+				else if (guess.contentEquals("negative"))
+					guessIndex = 1;
+				else if (guess.contentEquals("neutral"))
+					guessIndex = 2;
+				else if (guess.contentEquals("irrelevant"))
+					guessIndex = 3;
+				if (categoryType.contentEquals("positive"))
+					actualIndex = 0;
+				else if (categoryType.contentEquals("negative"))
+					actualIndex = 1;
+				else if (categoryType.contentEquals("neutral"))
+					actualIndex = 2;
+				else if (categoryType.contentEquals("irrelevant"))
+					actualIndex = 3;
+				matrice[guessIndex][actualIndex]++;
+				if (!guess.contentEquals(categoryType)) {
+					nbFalse++;
+					if (guess.contentEquals("positive")
+							|| guess.contentEquals("negative")) {
+						if (categoryType.contentEquals("positive")
+								|| categoryType.contentEquals("negative"))
+							posWhenNeg++;
+						else
+							posNegWhenIrrNeu++;
+					} else if (guess.contains("irrelevant")
+							|| guess.contains("neutral")) {
+						if (categoryType.contentEquals("irrelevant")
+								|| categoryType.contentEquals("neutral"))
+							neuWhenIrr++;
+						else
+							irrNeuWhenPosNeg++;
+					}
+				}
+
+			}
+			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr, posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void testMultinomialJB() {
 		int nbFalse = 0;
 		int posWhenNeg = 0;
 		int neuWhenIrr = 0;
@@ -180,32 +263,7 @@ public class FileBrowser {
 				}
 
 			}
-			accuratePercentage = (double) nbFalse
-					/ this.dictionnary.getNbTweets();
-			System.out.println();
-			System.out.println("false guesses = " + nbFalse
-					+ "\nTotal tweets = " + this.dictionnary.getNbTweets()
-					+ "\nPercentage false = " + accuratePercentage);
-			System.out
-					.println("\nPositive when Negative or Negative when Positive = "
-							+ posWhenNeg
-							+ "\tx 2\nIrrelevant when Neutral or Neutral when Irrelevant = "
-							+ neuWhenIrr + "\tx 1");
-			System.out
-					.println("Positive or Negative when Neutral or Irrelevant = "
-							+ posNegWhenIrrNeu
-							+ "\tx 3\nIrrelevant or Neutral when Positive or Negative = "
-							+ irrNeuWhenPosNeg + "\tx 4");
-			System.out.println("\tpos\tneg\tneu\tirr\n");
-			for (int i = 0; i < 4; i++) {
-				String lineInd = (i == 0) ? "pos" : (i == 1) ? "neg"
-						: (i == 2) ? "neu" : "irr";
-				System.out.print(lineInd);
-				for (int j = 0; j < 4; j++) {
-					System.out.print("\t" + matrice[i][j]);
-				}
-				System.out.println();
-			}
+			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr, posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -213,7 +271,91 @@ public class FileBrowser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return accuratePercentage;
+	}
+	
+	public void testBiNommialeBernouilli() {
+		int nbFalse = 0;
+		int posWhenNeg = 0;
+		int neuWhenIrr = 0;
+		int posNegWhenIrrNeu = 0;
+		int irrNeuWhenPosNeg = 0;
+		int[][] matrice = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
+				{ 0, 0, 0, 0 } };
+		InputStream ips;
+		try {
+			ips = new FileInputStream(filePath);
+			InputStreamReader ipsr = new InputStreamReader(ips);
+			BufferedReader br = new BufferedReader(ipsr);
+			String[] words;
+			String line;
+			while ((line = br.readLine()) != null) {
+				String guess;
+				words = line.substring(line.indexOf(')') + 1).split(
+						"[\\s\\!\"#&'()*+,-\\./:;<=>\\?\\[\\]^_`{|}~§@]+");
+				String categoryName = line.substring(line.indexOf(',') + 1,
+						line.indexOf(')'));
+				String categoryType = line.substring(1, line.indexOf(','));
+				TweetCategory currentCategory = null;
+				for (TweetCategory tc : categories) {
+					if (tc.getCategory().contentEquals(
+							categoryName.toLowerCase())) {
+						currentCategory = tc;
+					}
+				}
+				if (currentCategory == null) {
+					currentCategory = new TweetCategory(
+							categoryName.toLowerCase());
+				}
+
+				guess = currentCategory.biNommialeBernouilli(words);
+//				System.out.println("Guess : "+guess+"\nCategory : "+categoryName);
+				int guessIndex = -1;
+				int actualIndex = -1;
+				if (guess.contentEquals("positive"))
+					guessIndex = 0;
+				else if (guess.contentEquals("negative"))
+					guessIndex = 1;
+				else if (guess.contentEquals("neutral"))
+					guessIndex = 2;
+				else if (guess.contentEquals("irrelevant"))
+					guessIndex = 3;
+				if (categoryType.contentEquals("positive"))
+					actualIndex = 0;
+				else if (categoryType.contentEquals("negative"))
+					actualIndex = 1;
+				else if (categoryType.contentEquals("neutral"))
+					actualIndex = 2;
+				else if (categoryType.contentEquals("irrelevant"))
+					actualIndex = 3;
+				matrice[guessIndex][actualIndex]++;
+				if (!guess.contentEquals(categoryType)) {
+					nbFalse++;
+					if (guess.contentEquals("positive")
+							|| guess.contentEquals("negative")) {
+						if (categoryType.contentEquals("positive")
+								|| categoryType.contentEquals("negative"))
+							posWhenNeg++;
+						else
+							posNegWhenIrrNeu++;
+					} else if (guess.contains("irrelevant")
+							|| guess.contains("neutral")) {
+						if (categoryType.contentEquals("irrelevant")
+								|| categoryType.contentEquals("neutral"))
+							neuWhenIrr++;
+						else
+							irrNeuWhenPosNeg++;
+					}
+				}
+
+			}
+			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr, posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void addTokenWords(String filePath) {
@@ -250,6 +392,36 @@ public class FileBrowser {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public void afficherResultats(int nbFalse, int posWhenNeg, int neuWhenIrr, int posNegWhenIrrNeu, int irrNeuWhenPosNeg, int matrice[][]){
+		double accuratePercentage = 0.0;
+		accuratePercentage = (double) nbFalse
+				/ this.dictionnary.getNbTweets();
+		System.out.println();
+		System.out.println("false guesses = " + nbFalse
+				+ "\nTotal tweets = " + this.dictionnary.getNbTweets()
+				+ "\nPercentage false = " + accuratePercentage);
+		System.out
+				.println("\nPositive when Negative or Negative when Positive = "
+						+ posWhenNeg
+						+ "\tx 2\nIrrelevant when Neutral or Neutral when Irrelevant = "
+						+ neuWhenIrr + "\tx 1");
+		System.out
+				.println("Positive or Negative when Neutral or Irrelevant = "
+						+ posNegWhenIrrNeu
+						+ "\tx 3\nIrrelevant or Neutral when Positive or Negative = "
+						+ irrNeuWhenPosNeg + "\tx 4");
+		System.out.println("\tpos\tneg\tneu\tirr\n");
+		for (int i = 0; i < 4; i++) {
+			String lineInd = (i == 0) ? "pos" : (i == 1) ? "neg"
+					: (i == 2) ? "neu" : "irr";
+			System.out.print(lineInd);
+			for (int j = 0; j < 4; j++) {
+				System.out.print("\t" + matrice[i][j]);
+			}
+			System.out.println();
 		}
 	}
 }
