@@ -23,16 +23,16 @@ public class Main {
 		System.out.println("\n**********Resultats sans Tokenizer**********\n");
 		fb.setDictionaries();
 		fb.testMultinomial("./results/trainMultibinomialSansToken.txt");
-		fb.testBiNommialeBernouilli("./results/trainBinommial.txt");
+		fb.testBiNommialeBernouilli("./results/trainBinommialSansToken.txt");
 		
 		System.out.println("\n**********Resultats avec Tokenizer Short**********\n");
 		fbTokenizer.setDictionaries();
 		fbTokenizer.testMultinomial("./results/trainMultibinomialShortToken.txt");
-		fbTokenizer.testBiNommialeBernouilli("./results/trainBinommial.txt");
+		fbTokenizer.testBiNommialeBernouilli("./results/trainBinommialShortToken.txt");
 		
 		System.out.println("\n**********Resultats avec Tokenizer Long**********\n");
 		fbTokenizer2.setDictionaries();
 		fbTokenizer2.testMultinomial("./results/trainMultibinomialLongToken.txt");
-		fbTokenizer2.testBiNommialeBernouilli("./results/trainBinommial.txt");
+		fbTokenizer2.testBiNommialeBernouilli("./results/trainBinommialLongToken.txt");
 	}
 }
