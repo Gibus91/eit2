@@ -16,21 +16,23 @@ public class Main {
 		FileBrowser fb = new FileBrowser(trainFilePath);
 		FileBrowser fbTokenizer = new FileBrowser(trainFilePath);
 		FileBrowser fbTokenizer2 = new FileBrowser(trainFilePath);
+		
 		fbTokenizer.addTokenWords(shortTokenFilePath);
 		fbTokenizer2.addTokenWords(longTokenFilePath);
+		
 		System.out.println("\n**********Resultats sans Tokenizer**********\n");
 		fb.setDictionaries();
-
 		fb.testMultinomial("./results/trainMultibinomialSansToken.txt");
 		fb.testBiNommialeBernouilli("./results/trainBinommial.txt");
+		
 		System.out.println("\n**********Resultats avec Tokenizer Short**********\n");
 		fbTokenizer.setDictionaries();
 		fbTokenizer.testMultinomial("./results/trainMultibinomialShortToken.txt");
 		fbTokenizer.testBiNommialeBernouilli("./results/trainBinommial.txt");
+		
 		System.out.println("\n**********Resultats avec Tokenizer Long**********\n");
 		fbTokenizer2.setDictionaries();
 		fbTokenizer2.testMultinomial("./results/trainMultibinomialLongToken.txt");
 		fbTokenizer2.testBiNommialeBernouilli("./results/trainBinommial.txt");
-		fb.testMultinomial("./results/trainBinommial.txt");
 	}
 }

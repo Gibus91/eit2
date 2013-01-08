@@ -14,26 +14,17 @@ import java.util.HashMap;
 
 public class FileBrowser {
 	private String filePath;
-	// private File tweet;
 	private Dictionnary dictionnary;
 	private HashMap<String, Integer> top20Frequency;
 	private ArrayList<TweetCategory> categories;
 	private HashMap<Character, ArrayList<String>> tokenWords;
 
-	// private Integer nbIrrelevantTweets;
-	// private Integer nbNeutralTweets;
-	// private Integer nbPostiveTweets;
-	// private Integer nbNegativeTweets;
-
 	public FileBrowser(String filePath) {
 		this.filePath = filePath;
-		// tweet = new File(filePath);
 		dictionnary = new Dictionnary();
 		top20Frequency = new HashMap<String, Integer>();
 		categories = new ArrayList<TweetCategory>();
 		tokenWords = new HashMap<Character, ArrayList<String>>();
-		// nbIrrelevantTweets = nbNeutralTweets = nbPostiveTweets =
-		// nbNegativeTweets = 0;
 	}
 
 	public void setDictionaries() {
@@ -41,7 +32,6 @@ public class FileBrowser {
 		try {
 			ips = new FileInputStream(filePath);
 			InputStreamReader ipsr = new InputStreamReader(ips);
-			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(ipsr);
 			String[] words;
 			String line;
@@ -89,6 +79,7 @@ public class FileBrowser {
 					}
 				}
 			}
+			br.close();
 			this.top20Frequency = dictionnary.getTop20Frequency();
 			System.out.println("20 most frequent words : \n"
 					+ this.top20Frequency.toString());
@@ -111,7 +102,6 @@ public class FileBrowser {
 
 	public void testMultinomial(String destFile) {
 		int nbFalse = 0;
-		int n = 1;
 		int posWhenNeg = 0;
 		int neuWhenIrr = 0;
 		int posNegWhenIrrNeu = 0;
@@ -125,7 +115,7 @@ public class FileBrowser {
 			BufferedReader br = new BufferedReader(ipsr);
 
 			File outFile = new File(destFile);
-			if(outFile.exists())
+			if (outFile.exists())
 				outFile.delete();
 			FileOutputStream fos = new FileOutputStream(outFile);
 			PrintWriter out = new PrintWriter(fos);
@@ -172,7 +162,6 @@ public class FileBrowser {
 					actualIndex = 3;
 				matrice[guessIndex][actualIndex]++;
 				if (!guess.contentEquals(categoryType)) {
-					// System.out.println("Error at line : "+n);
 					nbFalse++;
 					if (guess.contentEquals("positive")
 							|| guess.contentEquals("negative")) {
@@ -190,8 +179,6 @@ public class FileBrowser {
 							irrNeuWhenPosNeg++;
 					}
 				}
-				n++;
-
 			}
 
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
@@ -199,6 +186,7 @@ public class FileBrowser {
 
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
 					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+			br.close();
 			ips.close();
 			out.flush();
 			out.close();
@@ -227,7 +215,7 @@ public class FileBrowser {
 			BufferedReader br = new BufferedReader(ipsr);
 
 			File outFile = new File(destFile);
-			if(outFile.exists())
+			if (outFile.exists())
 				outFile.delete();
 			FileOutputStream fos = new FileOutputStream(outFile);
 			PrintWriter out = new PrintWriter(fos);
@@ -254,11 +242,7 @@ public class FileBrowser {
 				}
 
 				guess = currentCategory.biNommialeBernouilli(words);
-
-				// System.out.println("Guess : "+guess+"\nCategory : "+categoryName);
-
 				out.println(guess);
-				// System.out.println("Guess : "+guess+"\nCategory : "+categoryName);
 
 				int guessIndex = -1;
 				int actualIndex = -1;
@@ -305,6 +289,7 @@ public class FileBrowser {
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
 					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
 			ips.close();
+			br.close();
 			out.flush();
 			out.close();
 
@@ -345,6 +330,7 @@ public class FileBrowser {
 					}
 				}
 			}
+			br.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
