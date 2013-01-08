@@ -14,14 +14,21 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		FileBrowser fb = new FileBrowser(trainFilePath);
-//		FileBrowser fbTokenizer = new FileBrowser(trainFilePath);
-//		fbTokenizer.addTokenWords(shortTokenFilePath);
-//		fbTokenizer.addTokenWords(longTokenFilePath);
+		FileBrowser fbTokenizer = new FileBrowser(trainFilePath);
+		FileBrowser fbTokenizer2 = new FileBrowser(trainFilePath);
+		fbTokenizer.addTokenWords(shortTokenFilePath);
+		fbTokenizer2.addTokenWords(longTokenFilePath);
 		System.out.println("\n**********Resultats sans Tokenizer**********\n");
 		fb.setDictionaries();
+		fb.testMultinomial();
 		fb.testBiNommialeBernouilli();
-//		System.out.println("\n**********Resultats avec Tokenizer**********\n");
-//		fbTokenizer.setDictionaries();
-//		fbTokenizer.testMultinomial();
+		System.out.println("\n**********Resultats avec Tokenizer Short**********\n");
+		fbTokenizer.setDictionaries();
+		fbTokenizer.testMultinomial();
+		fbTokenizer.testBiNommialeBernouilli();
+		System.out.println("\n**********Resultats avec Tokenizer Long**********\n");
+		fbTokenizer2.setDictionaries();
+		fbTokenizer2.testMultinomial();
+		fbTokenizer2.testBiNommialeBernouilli();
 	}
 }

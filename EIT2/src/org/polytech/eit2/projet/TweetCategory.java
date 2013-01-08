@@ -1,8 +1,5 @@
 package org.polytech.eit2.projet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class TweetCategory {
 	private String category;
 	private Dictionnary categoryDictionary;
@@ -53,36 +50,47 @@ public class TweetCategory {
 	public String getCategory() {
 		return category;
 	}
-	
-	public String biNommialeBernouilli(String words[]){
+
+	public String biNommialeBernouilli(String words[]) {
 		String highestProbability = "";
 		double positiveProbability = 0.0;
 		double negativeProbability = 0.0;
 		double irrelevantProbability = 0.0;
 		double neutralProbability = 0.0;
-		for (String word : this.categoryDictionary.getDictionary().keySet()){
-			if (!word.toLowerCase().contentEquals(category)){
+		for (String word : this.categoryDictionary.getDictionary().keySet()) {
+			if (!word.toLowerCase().contentEquals(category)) {
 				boolean found = false;
-				for (String w : words){
-					if(w.toLowerCase().contentEquals(word)){
+				for (String w : words) {
+					if (w.toLowerCase().contentEquals(word)) {
 						found = true;
 						break;
 					}
 				}
-				if(found){
-					positiveProbability+=Math.log10(this.positive.bernouilli(word));
-					negativeProbability+=Math.log10(this.negative.bernouilli(word));
-					irrelevantProbability+=Math.log10(this.irrelevant.bernouilli(word));
-					neutralProbability+=Math.log10(this.neutral.bernouilli(word));
-				}
-				else {
-					positiveProbability+=Math.log10(1 - this.positive.bernouilli(word));
-					negativeProbability+=Math.log10(1 - this.negative.bernouilli(word));
-					irrelevantProbability+=Math.log10(1 - this.irrelevant.bernouilli(word));
-					neutralProbability+=Math.log10(1 - this.neutral.bernouilli(word));				
+				
+				if (found) {
+					positiveProbability += Math.log10(this.positive
+							.bernouilli(word));
+					negativeProbability += Math.log10(this.negative
+							.bernouilli(word));
+					irrelevantProbability += Math.log10(this.irrelevant
+							.bernouilli(word));
+					neutralProbability += Math.log10(this.neutral
+							.bernouilli(word));
+				} else {
+					positiveProbability += Math.log10(1 - this.positive
+							.bernouilli(word));
+					negativeProbability += Math.log10(1 - this.negative
+							.bernouilli(word));
+					irrelevantProbability += Math.log10(1 - this.irrelevant
+							.bernouilli(word));
+					neutralProbability += Math.log10(1 - this.neutral
+							.bernouilli(word));
 				}
 			}
 		}
+		/**
+		 * TODO
+		 */
 		double probaMax = Math.max(
 				Math.max(positiveProbability, negativeProbability),
 				Math.max(irrelevantProbability, neutralProbability));
@@ -112,41 +120,8 @@ public class TweetCategory {
 					.toLowerCase());
 			neutralProbability *= neutral.wordFrequency(word.toLowerCase());
 		}
-		double probaMax = Math.max(
-				Math.max(positiveProbability, negativeProbability),
-				Math.max(irrelevantProbability, neutralProbability));
-		if (probaMax == irrelevantProbability)
-			highestProbability = "irrelevant";
-		else if (probaMax == neutralProbability
-				|| Math.abs(positiveProbability - negativeProbability)
-						/ Math.max(positiveProbability, negativeProbability) <= 0.05)
-			highestProbability = "neutral";
-		else if (probaMax == positiveProbability)
-			highestProbability = "positive";
-		else if (probaMax == negativeProbability)
-			highestProbability = "negative";
-		return highestProbability;
-	}
-
-	public String biNommiale(String words[]) {
-		String highestProbability = "";
-		double positiveProbability = 1.0;
-		double negativeProbability = 1.0;
-		double irrelevantProbability = 1.0;
-		double neutralProbability = 1.0;
-		for (String word : words) {
-			positiveProbability *= positive.wordFrequency(word.toLowerCase())
-					* (1 - positive.wordFrequency(word.toLowerCase()));
-			negativeProbability *= negative.wordFrequency(word.toLowerCase())
-					* (1 - negative.wordFrequency(word.toLowerCase()));
-			irrelevantProbability *= irrelevant.wordFrequency(word
-					.toLowerCase())
-					* (1 - irrelevant.wordFrequency(word.toLowerCase()));
-			neutralProbability *= neutral.wordFrequency(word.toLowerCase())
-					* (1 - neutral.wordFrequency(word.toLowerCase()));
-		}
 		/**
-		 * TODO 
+		 * TODO
 		 */
 		double probaMax = Math.max(
 				Math.max(positiveProbability, negativeProbability),
@@ -163,5 +138,4 @@ public class TweetCategory {
 			highestProbability = "negative";
 		return highestProbability;
 	}
-	
 }
