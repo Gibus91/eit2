@@ -20,6 +20,7 @@ public class Main {
 		fbTokenizer2.addTokenWords(longTokenFilePath);
 		System.out.println("\n**********Resultats sans Tokenizer**********\n");
 		fb.setDictionaries();
+<<<<<<< HEAD
 		fb.testMultinomial();
 		fb.testBiNommialeBernouilli();
 		System.out.println("\n**********Resultats avec Tokenizer Short**********\n");
@@ -30,5 +31,11 @@ public class Main {
 		fbTokenizer2.setDictionaries();
 		fbTokenizer2.testMultinomial();
 		fbTokenizer2.testBiNommialeBernouilli();
+=======
+		fb.testMultinomial("./results/trainBinommial.txt");
+//		System.out.println("\n**********Resultats avec Tokenizer**********\n");
+//		fbTokenizer.setDictionaries();
+//		fbTokenizer.testMultinomial();
+>>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
 	}
 }

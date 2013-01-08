@@ -1,11 +1,14 @@
 package org.polytech.eit2.projet;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -106,8 +109,9 @@ public class FileBrowser {
 
 	}
 
-	public void testMultinomial() {
+	public void testMultinomial(String destFile) {
 		int nbFalse = 0;
+		int n = 1;
 		int posWhenNeg = 0;
 		int neuWhenIrr = 0;
 		int posNegWhenIrrNeu = 0;
@@ -119,6 +123,11 @@ public class FileBrowser {
 			ips = new FileInputStream(filePath);
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
+			
+			File outFile = new File(destFile);
+			outFile.delete();
+			FileOutputStream fos = new FileOutputStream(outFile);
+			PrintWriter out = new PrintWriter(fos);
 			String[] words;
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -141,6 +150,7 @@ public class FileBrowser {
 				}
 
 				guess = currentCategory.multiNommiale(words);
+				out.println(guess);
 				int guessIndex = -1;
 				int actualIndex = -1;
 				if (guess.contentEquals("positive"))
@@ -161,6 +171,7 @@ public class FileBrowser {
 					actualIndex = 3;
 				matrice[guessIndex][actualIndex]++;
 				if (!guess.contentEquals(categoryType)) {
+//					System.out.println("Error at line : "+n);
 					nbFalse++;
 					if (guess.contentEquals("positive")
 							|| guess.contentEquals("negative")) {
@@ -178,10 +189,18 @@ public class FileBrowser {
 							irrNeuWhenPosNeg++;
 					}
 				}
+				n++;
 
 			}
+<<<<<<< HEAD
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
 					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+=======
+			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr, posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+			ips.close();
+			out.flush();
+			out.close();
+>>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -190,6 +209,7 @@ public class FileBrowser {
 			e.printStackTrace();
 		}
 	}
+<<<<<<< HEAD
 
 	public void testBiNommialeBernouilli() {
 		int nbFalse = 0;
@@ -204,6 +224,28 @@ public class FileBrowser {
 			ips = new FileInputStream(filePath);
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
+=======
+	
+	public void testBiNommialeBernouilli(String destFile) {
+		int nbFalse = 0;
+		int posWhenNeg = 0;
+		int neuWhenIrr = 0;
+		int posNegWhenIrrNeu = 0;
+		int irrNeuWhenPosNeg = 0;
+		int[][] matrice = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
+				{ 0, 0, 0, 0 } };
+		InputStream ips;
+		try {
+			ips = new FileInputStream(filePath);
+			InputStreamReader ipsr = new InputStreamReader(ips);
+			BufferedReader br = new BufferedReader(ipsr);
+			
+			File outFile = new File(destFile);
+			outFile.delete();
+			FileOutputStream fos = new FileOutputStream(outFile);
+			PrintWriter out = new PrintWriter(fos);
+			
+>>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
 			String[] words;
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -226,7 +268,12 @@ public class FileBrowser {
 				}
 
 				guess = currentCategory.biNommialeBernouilli(words);
+<<<<<<< HEAD
 				// System.out.println("Guess : "+guess+"\nCategory : "+categoryName);
+=======
+				out.println(guess);
+//				System.out.println("Guess : "+guess+"\nCategory : "+categoryName);
+>>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
 				int guessIndex = -1;
 				int actualIndex = -1;
 				if (guess.contentEquals("positive"))
@@ -266,8 +313,15 @@ public class FileBrowser {
 				}
 
 			}
+<<<<<<< HEAD
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
 					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+=======
+			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr, posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
+			ips.close();
+			out.flush();
+			out.close();
+>>>>>>> branch 'master' of https://github.com/Gibus91/eit2.git
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -342,4 +396,45 @@ public class FileBrowser {
 			System.out.println();
 		}
 	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public Dictionnary getDictionnary() {
+		return dictionnary;
+	}
+
+	public void setDictionnary(Dictionnary dictionnary) {
+		this.dictionnary = dictionnary;
+	}
+
+	public HashMap<String, Integer> getTop20Frequency() {
+		return top20Frequency;
+	}
+
+	public void setTop20Frequency(HashMap<String, Integer> top20Frequency) {
+		this.top20Frequency = top20Frequency;
+	}
+
+	public ArrayList<TweetCategory> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(ArrayList<TweetCategory> categories) {
+		this.categories = categories;
+	}
+
+	public HashMap<Character, ArrayList<String>> getTokenWords() {
+		return tokenWords;
+	}
+
+	public void setTokenWords(HashMap<Character, ArrayList<String>> tokenWords) {
+		this.tokenWords = tokenWords;
+	}
+	
 }
