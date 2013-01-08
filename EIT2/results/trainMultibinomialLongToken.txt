@@ -348,7 +348,7 @@ negative
 irrelevant
 irrelevant
 irrelevant
-neutral
+negative
 irrelevant
 irrelevant
 neutral
@@ -2266,7 +2266,7 @@ positive
 neutral
 irrelevant
 negative
-neutral
+negative
 neutral
 neutral
 neutral

@@ -184,8 +184,6 @@ public class FileBrowser {
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
 					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
 
-			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
-					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
 			br.close();
 			ips.close();
 			out.flush();
@@ -286,8 +284,6 @@ public class FileBrowser {
 			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
 					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
 
-			afficherResultats(nbFalse, posWhenNeg, neuWhenIrr,
-					posNegWhenIrrNeu, irrNeuWhenPosNeg, matrice);
 			ips.close();
 			br.close();
 			out.flush();
