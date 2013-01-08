@@ -11,11 +11,20 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class FileBrowser {
 	private String filePath;
 	private Dictionnary dictionnary;
 	private HashMap<String, Integer> top20Frequency;
+	private HashMap<String, Integer> top20MostIrrelevant;
+	private HashMap<String, Integer> top20MostNeutral;
+	private HashMap<String, Integer> top20MostPositive;
+	private HashMap<String, Integer> top20MostNegative;
+	private HashMap<String, Integer> top20LeastIrrelevant;
+	private HashMap<String, Integer> top20LeastNeutral;
+	private HashMap<String, Integer> top20LeastPositive;
+	private HashMap<String, Integer> top20LeastNegative;
 	private ArrayList<TweetCategory> categories;
 	private HashMap<Character, ArrayList<String>> tokenWords;
 
@@ -23,6 +32,14 @@ public class FileBrowser {
 		this.filePath = filePath;
 		dictionnary = new Dictionnary();
 		top20Frequency = new HashMap<String, Integer>();
+		top20MostIrrelevant = new HashMap<String, Integer>();
+		top20MostNeutral = new HashMap<String, Integer>();
+		top20MostPositive = new HashMap<String, Integer>();
+		top20MostNegative = new HashMap<String, Integer>();
+		top20LeastIrrelevant = new HashMap<String, Integer>();
+		top20LeastNeutral = new HashMap<String, Integer>();
+		top20LeastPositive = new HashMap<String, Integer>();
+		top20LeastNegative = new HashMap<String, Integer>();
 		categories = new ArrayList<TweetCategory>();
 		tokenWords = new HashMap<Character, ArrayList<String>>();
 	}
@@ -334,6 +351,209 @@ public class FileBrowser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void top20Significance(String polarite){
+		HashMap<String, Integer> top20 = new HashMap<String, Integer>();
+		HashMap<String, Integer> less20 = new HashMap<String, Integer>();
+		
+		for(TweetCategory c : this.categories){
+			Dictionnary tmp;
+			if(polarite.contentEquals("irrelevant"))
+				tmp = c.getIrrelevant();
+			else if(polarite.contentEquals("neutral"))
+				tmp = c.getNeutral();
+			else if(polarite.contentEquals("positive"))
+				tmp = c.getPositive();
+			else if(polarite.contentEquals("negative"))
+				tmp = c.getNegative();
+			else
+				tmp = new Dictionnary();
+			HashMap <String, Integer> topReturn = tmp.getTop20Frequency();
+			HashMap <String, Integer> lessReturn = tmp.getLess20Frequency();
+			
+			for(String word : topReturn.keySet()){
+				if(!top20.containsKey(word))
+					top20.put(word, topReturn.get(word));
+				else if (top20.get(word) < topReturn.get(word)){
+					top20.remove(word);
+					top20.put(word, topReturn.get(word));					
+				}
+			}
+			for(String word : lessReturn.keySet()){
+				if(!less20.containsKey(word)){
+					less20.put(word, lessReturn.get(word));
+				}
+				else if (less20.get(word) < lessReturn.get(word)){
+					less20.remove(word);
+					less20.put(word, lessReturn.get(word));					
+				}
+			}
+		}
+
+		ValueComparator vcTop = new ValueComparator(top20);
+		ValueComparator vcLeast = new ValueComparator(less20);
+		TreeMap<String, Integer> tmpTop = new TreeMap<String, Integer>(vcTop);
+		TreeMap<String, Integer> tmpLeast = new TreeMap<String, Integer>(vcLeast);
+		tmpTop.putAll(top20);
+		tmpLeast.putAll(less20);
+		HashMap<String, Integer> bufferTmp = new HashMap<String, Integer>();
+		HashMap<String, Integer> bufferTmp2 = new HashMap<String, Integer>();
+		int n = 0;
+		for(String w : tmpTop.keySet()){
+			if(n == 20){
+				break;
+			}
+			bufferTmp.put(w, top20.get(w));
+			n++;
+		}
+		n = 0;
+		for(String w : tmpLeast.descendingKeySet()){
+			if(n == 20){
+				break;
+			}
+			bufferTmp2.put(w, less20.get(w));
+			n++;
+		}
+		if(polarite.contentEquals("irrelevant")){
+			this.top20MostIrrelevant = bufferTmp;
+			this.top20LeastIrrelevant = bufferTmp2;
+		}else if(polarite.contentEquals("neutral")){
+			this.top20MostNeutral = bufferTmp;
+			this.top20LeastNeutral = bufferTmp2;
+		}else if(polarite.contentEquals("positive")){
+			this.top20MostPositive = bufferTmp2;
+			this.top20LeastPositive = bufferTmp;
+		}else if(polarite.contentEquals("negative")){
+			this.top20MostNegative = bufferTmp;
+			this.top20LeastNegative = bufferTmp2;
+		}
+		
+	}
+	
+	public void setAllTops(){
+		top20Significance("irrelevant");
+		top20Significance("neutral");
+		top20Significance("positive");
+		top20Significance("negative");
+		ArrayList<String> toDelete = new ArrayList<String>();
+		for(String wordIrre : this.top20MostIrrelevant.keySet()){
+			boolean foundWord = false;
+			if(this.top20MostNeutral.containsKey(wordIrre)){
+					this.top20MostNeutral.remove(wordIrre);
+					foundWord=true;
+			}
+			if(this.top20MostPositive.containsKey(wordIrre)){
+					this.top20MostPositive.remove(wordIrre);
+					foundWord=true;
+			}
+			if(this.top20MostNegative.containsKey(wordIrre)){
+					this.top20MostNegative.remove(wordIrre);
+					foundWord=true;
+			}
+			if(foundWord){
+				toDelete.add(wordIrre);
+			}
+		}
+		for(String word : toDelete){
+			this.top20MostIrrelevant.remove(word);
+		}
+		toDelete = new ArrayList<String>();
+
+		for(String wordNeut : this.top20MostNeutral.keySet()){
+			boolean foundWord = false;
+			if(this.top20MostPositive.containsKey(wordNeut)){
+					this.top20MostPositive.remove(wordNeut);
+					foundWord=true;
+			}
+			if(this.top20MostNegative.containsKey(wordNeut)){
+					this.top20MostNegative.remove(wordNeut);
+					foundWord=true;
+			}
+			if(foundWord){
+				toDelete.add(wordNeut);
+			}
+		}
+		for(String word : toDelete){
+			this.top20MostNeutral.remove(word);
+		}
+		toDelete = new ArrayList<String>();
+
+		for(String wordPos : this.top20MostPositive.keySet()){
+			boolean foundWord = false;
+			if(this.top20MostNegative.containsKey(wordPos)){
+					this.top20MostNegative.remove(wordPos);
+					foundWord=true;
+			}
+			if(foundWord){
+				toDelete.add(wordPos);
+			}
+		}
+		for(String word : toDelete){
+			this.top20MostPositive.remove(word);
+		}
+		toDelete = new ArrayList<String>();
+		
+
+		for(String wordIrre : this.top20LeastIrrelevant.keySet()){
+			boolean foundWord = false;
+			if(this.top20LeastNeutral.containsKey(wordIrre)){
+					this.top20LeastNeutral.remove(wordIrre);
+					foundWord=true;
+			}
+			if(this.top20LeastPositive.containsKey(wordIrre)){
+					this.top20LeastPositive.remove(wordIrre);
+					foundWord=true;
+			}
+			if(this.top20LeastNegative.containsKey(wordIrre)){
+					this.top20LeastNegative.remove(wordIrre);
+					foundWord=true;
+			}
+			if(foundWord){
+				toDelete.add(wordIrre);
+			}
+		}
+		for(String word : toDelete){
+			this.top20LeastIrrelevant.remove(word);
+		}
+		toDelete = new ArrayList<String>();
+
+		for(String wordNeut : this.top20LeastNeutral.keySet()){
+			boolean foundWord = false;
+			if(this.top20LeastPositive.containsKey(wordNeut)){
+					this.top20LeastPositive.remove(wordNeut);
+					foundWord=true;
+			}
+			if(this.top20LeastNegative.containsKey(wordNeut)){
+					this.top20LeastNegative.remove(wordNeut);
+					foundWord=true;
+			}
+			if(foundWord){
+				toDelete.add(wordNeut);
+			}
+		}
+		for(String word : toDelete){
+			this.top20LeastNeutral.remove(word);
+		}
+		toDelete = new ArrayList<String>();
+
+		for(String wordPos : this.top20LeastPositive.keySet()){
+			boolean foundWord = false;
+			if(this.top20LeastNegative.containsKey(wordPos)){
+					this.top20LeastNegative.remove(wordPos);
+					foundWord=true;
+			}
+			if(foundWord){
+				toDelete.add(wordPos);
+			}
+		}
+		for(String word : toDelete){
+			this.top20LeastPositive.remove(word);
+		}
+		System.out.println("\nTop most irrelevant : \n"+ this.top20MostIrrelevant.toString()+"\nTop least irrelevant : \n "+ this.top20LeastIrrelevant.toString()+"\n");
+		System.out.println("\nTop most neutral : \n"+ this.top20MostNeutral.toString()+"\nTop least neutral : \n "+ this.top20LeastNeutral.toString()+"\n");
+		System.out.println("\nTop most positive : \n"+ this.top20MostPositive.toString()+"\nTop least positive : \n "+ this.top20LeastPositive.toString()+"\n");
+		System.out.println("\nTop most negative : \n"+ this.top20MostNegative.toString()+"\nTop least negative : \n "+ this.top20LeastNegative.toString()+"\n");
 	}
 
 	public void afficherResultats(int nbFalse, int posWhenNeg, int neuWhenIrr,

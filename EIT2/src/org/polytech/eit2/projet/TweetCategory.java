@@ -138,4 +138,37 @@ public class TweetCategory {
 			highestProbability = "negative";
 		return highestProbability;
 	}
+
+	public Dictionnary getIrrelevant() {
+		return irrelevant;
+	}
+
+	public void setIrrelevant(Dictionnary irrelevant) {
+		this.irrelevant = irrelevant;
+	}
+
+	public Dictionnary getNeutral() {
+		return neutral;
+	}
+
+	public void setNeutral(Dictionnary neutral) {
+		this.neutral = neutral;
+	}
+
+	public Dictionnary getPositive() {
+		return positive;
+	}
+
+	public void setPositive(Dictionnary positive) {
+		this.positive = positive;
+	}
+
+	public Dictionnary getNegative() {
+		return negative;
+	}
+
+	public void setNegative(Dictionnary negative) {
+		this.negative = negative;
+	}
+	
 }

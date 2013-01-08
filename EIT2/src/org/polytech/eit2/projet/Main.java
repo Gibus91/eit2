@@ -22,6 +22,7 @@ public class Main {
 		
 		System.out.println("\n**********Resultats sans Tokenizer**********\n");
 		fb.setDictionaries();
+		fb.setAllTops(); // Recupere et affiche les top (plus et moins) significatifs pour chaque polarité
 		fb.testMultinomial("./results/trainMultibinomialSansToken.txt");
 		fb.testBiNommialeBernouilli("./results/trainBinommialSansToken.txt");
 		

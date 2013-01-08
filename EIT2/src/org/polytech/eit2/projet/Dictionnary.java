@@ -41,6 +41,22 @@ public class Dictionnary {
 		}
 		return top20Frequency;
 	}
+	
+	public HashMap<String, Integer> getLess20Frequency() {
+		HashMap<String, Integer> top20Frequency = new HashMap<String, Integer>();
+		ValueComparator vc = new ValueComparator(this.dictionary);
+		TreeMap<String, Integer> sortedByValue = new TreeMap<String, Integer>(vc);
+		sortedByValue.putAll(dictionary);
+		int n = 0;
+		for (String w : sortedByValue.descendingKeySet()){
+			if (n>=20)
+				break;
+			top20Frequency.put(w, this.dictionary.get(w));
+			n++;
+		}
+		return top20Frequency;
+	}
+	
 	//Le bug viendrai du fait qu'avant c'Žtait 0.00001 si le dico ne contient pas le mot
 	public double wordFrequency(String word){
 		if (!this.dictionary.containsKey(word))
