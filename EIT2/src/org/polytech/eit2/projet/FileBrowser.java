@@ -207,7 +207,9 @@ public class FileBrowser {
 					actualIndex = 2;
 				else if (categoryType.contentEquals("irrelevant"))
 					actualIndex = 3;
-				matrice[guessIndex][actualIndex]++;
+				if(actualIndex != -1 &&  guessIndex != -1)
+					matrice[guessIndex][actualIndex]++;
+				
 				if (!guess.contentEquals(categoryType)) {
 					nbFalse++;
 					if (guess.contentEquals("positive")

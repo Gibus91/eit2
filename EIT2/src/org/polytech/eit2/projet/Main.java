@@ -24,7 +24,7 @@ public class Main {
 		fb.setDictionaries();
 		fb.setAllTops(); // Recupere et affiche les top (plus et moins) significatifs pour chaque polarité
 		fb.testMultinomial("./results/trainMultinomialSansToken.txt");
-		fb.testBiNommialeBernouilli("./results/trainBinommialSansToken.txt");
+		//fb.testBiNommialeBernouilli("./results/trainBinommialSansToken.txt");
 		//On lance Multinommial sur le corpus de test
 		
 		fb.setFilePath(testFilePath);
@@ -33,11 +33,11 @@ public class Main {
 		System.out.println("\n**********Resultats avec Tokenizer Short**********\n");
 		fbTokenizer.setDictionaries();
 		fbTokenizer.testMultinomial("./results/trainMultinomialShortToken.txt");
-		fbTokenizer.testBiNommialeBernouilli("./results/trainBinommialShortToken.txt");
+		//fbTokenizer.testBiNommialeBernouilli("./results/trainBinommialShortToken.txt");
 		
 		System.out.println("\n**********Resultats avec Tokenizer Long**********\n");
 		fbTokenizer2.setDictionaries();
 		fbTokenizer2.testMultinomial("./results/trainMultinomialLongToken.txt");
-		fbTokenizer2.testBiNommialeBernouilli("./results/trainBinommialLongToken.txt");
+		//fbTokenizer2.testBiNommialeBernouilli("./results/trainBinommialLongToken.txt");
 	}
 }
